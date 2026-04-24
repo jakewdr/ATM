@@ -5,7 +5,6 @@ package com.atmbanksimulator;
 // Bank class: a simple implementation of a bank, containing a list of bank accounts
 // and has a currently logged-in account (loggedInAccount).
 public class Bank {
-
     // ToDO: Optional extension:
     // Improve account management in the Bank class:
     // Replace Array with ArrayList for managing BankAccount objects.
