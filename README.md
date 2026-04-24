@@ -23,6 +23,7 @@
 - Get github contributions set up properly
 - Implement builds correctly
 - CSS and Java formatting + linting automation?
+- Add keyboard input
 
 ... and then the report and powerpoint
 
