@@ -46,7 +46,7 @@ class View {
         grid.add(laMsg, 0, 0);         // Add to GUI at the top
 
         tfInput = new TextField();     // text field for numbers
-        tfInput.setEditable(false);     // Read only (user can't type in)
+        tfInput.setEditable(true);     // Read only (user can't type in)
         grid.add(tfInput, 0, 1);    // Add to GUI on second row
 
         taResult = new TextArea();         // text area for instructions, transaction results
