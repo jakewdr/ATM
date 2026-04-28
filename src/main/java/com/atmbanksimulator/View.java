@@ -46,7 +46,7 @@ class View {
         grid.add(laMsg, 0, 0);         // Add to GUI at the top
 
         tfInput = new TextField();     // text field for numbers
-        tfInput.setEditable(true);     // Read only (user can't type in)
+        tfInput.setEditable(false);     // Read only (user can't type in)
         grid.add(tfInput, 0, 1);    // Add to GUI on second row
 
         taResult = new TextArea();         // text area for instructions, transaction results
@@ -57,10 +57,12 @@ class View {
 
         // Define the button layout as a 2D array of text labels.
         // Empty strings ("") represent blank spaces in the grid.
-        String[][] buttonTexts = {
-                {"Dep", "W/D", "Bal", "Fin", "CLR", "ENT"},
-                {"", "", "", "", "", ""}
-        };
+        String buttonTexts[][] = {
+                {"7",    "8",  "9",  "",  "Dep",  ""},
+                {"4",    "5",  "6",  "",  "W/D",  ""},
+                {"1",    "2",  "3",  "",  "Bal",  "Fin"},
+                {"CLR",  "0",  "",   "",  "",     "Ent"} };
+
         // Build the button panel, loop through the array,
         // - For non-empty strings, create a Button
         // - For empty strings, add an empty Text element as a spacer

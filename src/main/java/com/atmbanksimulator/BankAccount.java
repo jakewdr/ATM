@@ -10,7 +10,6 @@ public class BankAccount {
     private String accPasswd ="";
     private int balance = 0;
 
-
     public BankAccount() {}
     public BankAccount(String a, String p, int b) {
         accNumber = a;
