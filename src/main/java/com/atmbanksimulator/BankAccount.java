@@ -9,7 +9,7 @@ public class BankAccount {
     private String accNumber = "";
     private String accPasswd ="";
     private int balance = 0;
-    //comment
+
 
     public BankAccount() {}
     public BankAccount(String a, String p, int b) {
