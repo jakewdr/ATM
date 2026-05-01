@@ -7,7 +7,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
-// ===== 🙂 View (Eyes / Ears / Nose / Mouth / Face) =====
+// =====  View (Eyes / Ears / Nose / Mouth / Face) =====
 
 // The View class creates the GUI for the application.
 // It does not know anything about business logic;
@@ -17,6 +17,7 @@ class View {
     int W = 500;         // Width  of window pixels
 
     Controller controller; // Reference to the Controller (part of the MVC setup)
+
 
     // Components (controls and layout) of the user interface
     private Label laMsg;        // Message label, e.g. shows "Welcome to ATM" at startup (not the window title)
@@ -74,7 +75,7 @@ class View {
                     // non-empty string - make a button
                     Button btn = new Button( text );
                     btn.setOnAction( this::buttonClicked );
-                              // Register event handler: call buttonClicked() whenever this button is pressed
+                    // Register event handler: call buttonClicked() whenever this button is pressed
                     buttonPane.getChildren().add( btn );    // add this button to tiled pane
                 } else {
                     // empty string - make an empty Text element as a spacer

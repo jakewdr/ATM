@@ -20,8 +20,22 @@ public class Bank {
     // a method to create new BankAccount - this is known as a 'factory method' and is a more
     // flexible way to do it than just using the 'new' keyword directly.
     public BankAccount makeBankAccount(String accNumber, String accPasswd, int balance) {
+
+        if (accNumber.equals("10001")) {
+            return new StudentAccount(accNumber, accPasswd, balance);
+        }
+
+        if (accNumber.equals("20001")) {
+            return new PrimeAccount(accNumber, accPasswd, balance);
+        }
+
+        if (accNumber.equals("30001")) {
+            return new SavingAccount(accNumber, accPasswd, balance);
+        }
+
         return new BankAccount(accNumber, accPasswd, balance);
     }
+
 
     // a method to add a new bank account to the bank - it returns true if it succeeds
     // or false if it fails (because the bank is 'full')

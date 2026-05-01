@@ -1,10 +1,6 @@
 package com.atmbanksimulator;
 
-// ===== 📚🌐BankAccount (Domain / Service / Business Logic) =====
 
-// BankAccount class:
-// - Stores instance variables for account number, password, and balance
-// - Provides methods to withdraw, deposit, check balance, etc.
 public class BankAccount {
     private String accNumber = "";
     private String accPasswd ="";
@@ -17,8 +13,7 @@ public class BankAccount {
         balance = b;
     }
 
-    // Withdraw money from this account.
-    // Returns true if successful, or false if the amount is negative or exceeds the current balance.
+   
     public boolean withdraw( int amount ) {
         if (amount < 0 || balance < amount) {
             return false;
@@ -53,4 +48,9 @@ public class BankAccount {
     public String getaccPasswd() {
         return accPasswd;
     }
+
+    protected void setBalance(double newBalance) {
+        this.balance = (int) newBalance;
+    }
+
 }
