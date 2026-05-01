@@ -19,11 +19,14 @@ public class UIModel {
     // The 'final' keyword ensures these values cannot be changed.
     private final String STATE_ACCOUNT_NO = "account_no";
     private final String STATE_PASSWORD = "password";
+    private final String STATE_CREATE_NUMBER = "create_number";
+    private final String STATE_CREATE_PASSWORD = "create_password";
     private final String STATE_LOGGED_IN = "logged_in";
 
     // Variables representing the state and data of the ATM UIModel
     private String state = STATE_ACCOUNT_NO;    // Current state of the ATM
     private String accNumber = "";         // Account number being typed
+    private String newAccNumber = "";
     private String accPasswd = "";         // Password being typed
 
     // Variables shown on the View display
@@ -48,6 +51,21 @@ public class UIModel {
         update();
     }
 
+    public void newNumber(){
+        setState(STATE_CREATE_NUMBER);
+        numberPadInput = "";
+        message = "Enter an account number";
+        result = "Enter an account number \nWhich is five \nCharacters long\nFollowed by \"Ent\"";
+        update();
+    }
+
+    public void newPassword() {
+        setState(STATE_CREATE_PASSWORD);
+        numberPadInput = "";
+        message = "Enter a new password";
+        result = "Enter a password \nWhich is five \nCharacters long\nFollowed by \"Ent\"";
+        update();
+    }
     // Reset the ATM UIModel after an invalid action or logout:
     // - Set state to STATE_ACCOUNT_NO
     // - Clear the numberPadInput
@@ -107,7 +125,7 @@ public class UIModel {
             case STATE_ACCOUNT_NO:
                 // Waiting for a complete account number
                 // If nothing was entered, reset with "Invalid Account Number"
-                if (numberPadInput.equals("")) {
+                if (numberPadInput.isEmpty()) {
                     message = "Invalid Account Number";
                     reset(message);
                 }
@@ -139,6 +157,30 @@ public class UIModel {
                     message = "Login failed: Unknown Account/Password";
                     reset(message);
                 }
+                break;
+            case STATE_CREATE_NUMBER:
+                if (numberPadInput.length() == 5) {
+                    newAccNumber = numberPadInput;
+                    numberPadInput = "";
+                    newPassword(); // move to password step
+                } else {
+                    message = "Invalid account number";
+                    reset(message);
+                }
+                break;
+
+            case STATE_CREATE_PASSWORD:
+                String newPasswordNumber = numberPadInput;
+
+                if (newPasswordNumber.length() == 5) {
+                    bank.addBankAccount(newAccNumber, newPasswordNumber, 0);
+                    message = "Account successfully created!";
+                    reset(message); // go back to login screen
+                } else {
+                    message = "Invalid password";
+                    reset(message);
+                }
+                numberPadInput = "";
                 break;
 
             case STATE_LOGGED_IN:

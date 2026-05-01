@@ -7,7 +7,6 @@ package com.atmbanksimulator;
 public class Controller {
 
     UIModel UIModel; // Reference to the UIModel (part of the MVC setup)
-
     // The process method is called by the View in response to user interface events.
     // It uses a switch statement to determine which UIModel method should be called,
     // and delegates the task accordingly.
@@ -34,6 +33,9 @@ public class Controller {
                 break;
             case "Fin":
                 UIModel.processFinish();
+                break;
+            case "New":
+                UIModel.newNumber();
                 break;
             default:
                 UIModel.processUnknownKey(action);
