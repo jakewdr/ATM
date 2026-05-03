@@ -38,6 +38,9 @@ public class UIModel {
     private String numberPadInput;         // Current number displayed in the TextField (as a string)
     private String result;                 // Contents of the TextArea (may be multiple lines)
 
+    private int loginAttempts = 0;
+    private final int maxAttempts = 3;
+
     // UIModel constructor: pass a Bank object that the ATM interacts with
     public UIModel(Bank bank) {
         this.bank = bank;
@@ -162,14 +165,23 @@ public class UIModel {
                 numberPadInput = "";
                 if ( bank.login(accNumber, accPasswd) )
                 {
+                    loginAttempts = 0;
                     // Successful login: change state to STATE_LOGGED_IN and provide instructions
                     setState(STATE_LOGGED_IN);
                     message = "Logged In";
                     result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
                 } else {
                     // Login failed: reset ATM and display error
-                    message = "Login failed: Unknown Account/Password";
-                    reset(message);
+                    loginAttempts++;
+
+                    if (loginAttempts >= maxAttempts) {
+                        reset("Too many failed attempts");
+                        result = "ATM reset. Start again.";
+                        loginAttempts = 0;
+                    } else {
+                        reset("Login failed");
+                        result = "Attempts left: " + (maxAttempts - loginAttempts);
+                    }
                 }
                 break;
             case STATE_CREATE_NUMBER:
@@ -312,6 +324,43 @@ public class UIModel {
         } else {
             reset("You are not logged in");
         }
+        update();
+    }
+
+    public void processTransfer() {
+
+        if (!state.equals(STATE_LOGGED_IN)) {
+            reset("You are not logged in");
+            update();
+            return;
+        }
+
+        int amount = parseValidAmount(numberPadInput);
+
+        if (amount <= 0) {
+            message = "Invalid Amount";
+            result = "Enter amount first";
+            update();
+            return;
+        }
+        // decides where to send the money
+        String targetAccount;
+
+        if (accNumber.equals("10001")) {
+            targetAccount = "10002";
+        } else {
+            targetAccount = "10001";
+        }
+
+        // performs the transfer between accounts
+        if (bank.transfer(targetAccount, amount)) {
+            message = "Transfer Successful";
+            result = "Transferred £" + amount + " to " + targetAccount;
+        } else {
+            message = "Transfer Failed";
+            result = "Not enough funds";
+        }
+        numberPadInput = "";
         update();
     }
 
