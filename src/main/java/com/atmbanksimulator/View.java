@@ -62,7 +62,7 @@ class View {
                 {"7",    "8",  "9",  "",  "Dep",  ""},
                 {"4",    "5",  "6",  "",  "W/D",  ""},
                 {"1",    "2",  "3",  "",  "Bal",  "Fin"},
-                {"CLR",  "0",  "",   "",  "TRF",     "Ent"} };
+                {"CLR",  "0",  "",   "TRF",  "Ent", "New"} };
 
         // Build the button panel, loop through the array,
         // - For non-empty strings, create a Button
