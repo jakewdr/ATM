@@ -31,9 +31,6 @@ public class Controller {
             case "Bal":
                 UIModel.processBalance();
                 break;
-            case "TRF":
-                UIModel.processTransfer();
-                break;
             case "Fin":
                 UIModel.processFinish();
                 break;
