@@ -58,7 +58,7 @@ class View {
 
         // Define the button layout as a 2D array of text labels.
         // Empty strings ("") represent blank spaces in the grid.
-        String buttonTexts[][] = {
+        String[][] buttonTexts = {
                 {"7",    "8",  "9",  "",  "Dep",  ""},
                 {"4",    "5",  "6",  "",  "W/D",  ""},
                 {"1",    "2",  "3",  "",  "Bal",  "Fin"},
@@ -71,7 +71,7 @@ class View {
         // then place the buttonPane into the main grid as the fourth row.
         for ( String[] row: buttonTexts ) {
             for (String text: row) {
-                if ( text.length() >= 1 ) {
+                if (!text.isEmpty()) {
                     // non-empty string - make a button
                     Button btn = new Button( text );
                     btn.setOnAction( this::buttonClicked );
