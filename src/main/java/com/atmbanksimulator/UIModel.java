@@ -22,9 +22,13 @@ public class UIModel {
     private final String STATE_CREATE_NUMBER = "create_number";
     private final String STATE_CREATE_PASSWORD = "create_password";
     private final String STATE_LOGGED_IN = "logged_in";
+    private final String STATE_WELCOME = "welcome";
+
 
     // Variables representing the state and data of the ATM UIModel
-    private String state = STATE_ACCOUNT_NO;    // Current state of the ATM
+      // Current state of the ATM
+    private String state = STATE_WELCOME;
+
     private String accNumber = "";         // Account number being typed
     private String newAccNumber = "";
     private String accPasswd = "";         // Password being typed
@@ -47,12 +51,13 @@ public class UIModel {
     // - Clear the numberPadInput - numbers displayed in the TextField
     // - Display the welcome message and user instructions
     public void initialise() {
-        setState(STATE_ACCOUNT_NO);
+        setState(STATE_WELCOME);
         numberPadInput = "";
         message = "Welcome to the ATM";
-        result = "Enter your account number\nFollowed by \"Ent\"";
+        result = "Press \"Ent\" to begin";
         update();
     }
+
 
     public void newNumber(){
         setState(STATE_CREATE_NUMBER);
@@ -69,6 +74,7 @@ public class UIModel {
         result = "Enter a password \nWhich is five \nCharacters long\nFollowed by \"Ent\"";
         update();
     }
+
     // Reset the ATM UIModel after an invalid action or logout:
     // - Set state to STATE_ACCOUNT_NO
     // - Clear the numberPadInput
@@ -125,6 +131,14 @@ public class UIModel {
         // The action depends on the current ATM state
         switch ( state )
         {
+            case STATE_WELCOME:
+
+                setState(STATE_ACCOUNT_NO);
+                message = "Enter your account number";
+                result = "Followed by \"Ent\"";
+                numberPadInput = "";
+                break;
+
             case STATE_ACCOUNT_NO:
                 // Waiting for a complete account number
                 // If nothing was entered, reset with "Invalid Account Number"
@@ -228,15 +242,18 @@ public class UIModel {
     // - If the user is logged in, retrieve the current balance and update messages/results accordingly
     // - Otherwise, reset the ATM and display an error message
     public void processBalance() {
-        if (state.equals(STATE_LOGGED_IN) ) {
+        if (state.equals(STATE_LOGGED_IN)) {
             numberPadInput = "";
             message = "Balance Available";
-            result = "Your Balance is: " + bank.getBalance();
+            result = "Your Balance is: " + bank.getBalance() +
+                    "\n\nChoose: Dep, W/D, Bal, Fin";
         } else {
             reset("You are not logged in");
         }
         update();
     }
+
+
 
     // Handle the Withdraw button:
     // If the user is logged in, attempt to withdraw the amount entered;
@@ -294,10 +311,16 @@ public class UIModel {
     // Handle the Finish button:
     // - If the user is logged in, log out
     // - Otherwise, reset the ATM and display an error message
+    // Handle the Finish button:
     public void processFinish() {
-        if (state.equals(STATE_LOGGED_IN) ) {
-            reset("Thank you for using the Bank ATM");
+        if (state.equals(STATE_LOGGED_IN)) {
+            message = "Thank you for using the Bank ATM";
+            result = "Goodbye!";
             bank.logout();
+
+            // Return to welcome page
+            setState(STATE_WELCOME);
+            numberPadInput = "";
         } else {
             reset("You are not logged in");
         }
@@ -342,7 +365,6 @@ public class UIModel {
     }
 
     // Handle unknown or invalid buttons for the current state:
-    // - Reset the ATM and display an "Invalid Command" message
     public void processUnknownKey(String action) {
         reset("Invalid Command");
         update();
@@ -350,7 +372,6 @@ public class UIModel {
 
     // Notify the View of changes by calling its update method
     private void update() {
-        view.update(message,numberPadInput, result);
+        view.update(message, numberPadInput, result);
     }
 }
-
