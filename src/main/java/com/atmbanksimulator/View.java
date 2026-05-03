@@ -66,7 +66,7 @@ class View {
 
 
                 {"CLR",  "0",  "",   "",  "TRF",     "Ent"} };
-changes
+
 
         // Build the button panel, loop through the array,
         // - For non-empty strings, create a Button
