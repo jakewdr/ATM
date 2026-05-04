@@ -18,7 +18,6 @@ class View {
 
     Controller controller; // Reference to the Controller (part of the MVC setup)
 
-
     // Components (controls and layout) of the user interface
     private Label laMsg;        // Message label, e.g. shows "Welcome to ATM" at startup (not the window title)
     private TextField tfInput;  // Input field where numbers typed on the keypad appear
@@ -54,40 +53,37 @@ class View {
         taResult.setEditable(false);       // Read only
         scrollPane  = new ScrollPane();    // create a scrolling window
         scrollPane.setContent(taResult);   // put the text area 'inside' the scrolling window
-        grid.add( scrollPane, 0, 2);    // add the scrolling window to GUI on third row
+        grid.add(scrollPane, 0, 2);    // add the scrolling window to GUI on third row
 
         // Define the button layout as a 2D array of text labels.
         // Empty strings ("") represent blank spaces in the grid.
         String buttonTexts[][] = {
-                {"7",    "8",  "9",  "",  "Dep",  ""},
-                {"4",    "5",  "6",  "",  "W/D",  ""},
-                {"1",    "2",  "3",  "",  "Bal",  "Fin"},
-
-
-
-                {"CLR",  "0",  "",   "",  "TRF",     "Ent"} };
-        {"CLR",  "0",  "",   "TRF",  "Ent", "New"} };
+                {"7", "8", "9", "", "Dep", ""},
+                {"4", "5", "6", "", "W/D", ""},
+                {"1", "2", "3", "", "Bal", "Fin"},
+                {"CLR", "0", "", "", "TRF", "Ent"}
+        };
 
         // Build the button panel, loop through the array,
         // - For non-empty strings, create a Button
         // - For empty strings, add an empty Text element as a spacer
         // Add all elements to the buttonPane (a tiled pane),
         // then place the buttonPane into the main grid as the fourth row.
-        for ( String[] row: buttonTexts ) {
-            for (String text: row) {
-                if ( text.length() >= 1 ) {
+        for (String[] row : buttonTexts) {
+            for (String text : row) {
+                if (text.length() >= 1) {
                     // non-empty string - make a button
-                    Button btn = new Button( text );
-                    btn.setOnAction( this::buttonClicked );
+                    Button btn = new Button(text);
+                    btn.setOnAction(this::buttonClicked);
                     // Register event handler: call buttonClicked() whenever this button is pressed
-                    buttonPane.getChildren().add( btn );    // add this button to tiled pane
+                    buttonPane.getChildren().add(btn);    // add this button to tiled pane
                 } else {
                     // empty string - make an empty Text element as a spacer
-                    buttonPane.getChildren().add( new Text() );
+                    buttonPane.getChildren().add(new Text());
                 }
             }
         }
-        grid.add(buttonPane,0,3); // add the tiled pane of buttons to the main grid
+        grid.add(buttonPane, 0, 3); // add the tiled pane of buttons to the main grid
 
         // add the complete GUI to the window and display it
         Scene scene = new Scene(grid, W, H);
@@ -104,8 +100,8 @@ class View {
         // this line asks the event to provide the actual Button object that was clicked
         Button b = ((Button) event.getSource());
         String text = b.getText();   // get the button label
-        System.out.println( "View::buttonClicked: label = "+ text );
-        controller.process( text );  // Pass it to the controller's process method
+        System.out.println("View::buttonClicked: label = " + text);
+        controller.process(text);  // Pass it to the controller's process method
     }
 
     // This method is called by the UIModel whenever the UIModel changes.
@@ -113,8 +109,7 @@ class View {
     // - msg → shown in the top message label
     // - tfInputMsg → shown in the text field (user input area)
     // - taResultMsg → shown in the text area (instructions / results)
-    public void update(String msg,String tfInputMsg,String taResultMsg)
-    {
+    public void update(String msg, String tfInputMsg, String taResultMsg) {
         laMsg.setText(msg);
         tfInput.setText(tfInputMsg);
         taResult.setText(taResultMsg);

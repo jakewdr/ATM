@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 // Together, they simulate how an ATM thinks, reacts, and handles money.
 
 public class Main extends Application {
-    public static void main( String args[] ) {launch(args);}
+    public static void main(String args[]) { launch(args); }
 
     public void start(Stage window) {
         // Create a Bank object add two bank accounts for test
@@ -19,19 +19,20 @@ public class Main extends Application {
         bank.addBankAccount("10001", "11111", 100);
         bank.addBankAccount("10002", "22222", 50);
 
-        //UIModel-View-Controller structure setup
+        // UIModel-View-Controller structure setup
         // Create the UIModel, View and Controller objects and link them together
-        UIModel UIModel = new UIModel(bank);   // the UIModel needs the Bank object to 'talk to' the bank
-        View  view  = new View();
-        Controller controller  = new Controller();
+        UIModel uiModel = new UIModel(bank);   // the UIModel needs the Bank object to 'talk to' the bank
+        View view = new View();
+        Controller controller = new Controller();
 
         // Link them together so they can talk to each other
         view.controller = controller;
-        controller.UIModel = UIModel;
-        UIModel.view = view;
+        controller.UIModel = uiModel;
+        uiModel.view = view;
 
         // start up the GUI (view), and then tell the UIModel to initialise itself
         view.start(window);
-        UIModel.initialise();
+        uiModel.initialise();
     }
 }
+
