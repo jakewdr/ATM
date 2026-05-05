@@ -8,9 +8,6 @@ package com.atmbanksimulator;
 // commands provided by the controller and tells the view to update when
 // something changes
 public class UIModel {
-    View view; // Reference to the View (part of the MVC setup)
-    private Bank bank; // The ATM communicates with this Bank
-
     // The ATM UIModel can be in one of three states:
     // 1. Waiting for an account number
     // 2. Waiting for a password
@@ -23,10 +20,10 @@ public class UIModel {
     private final String STATE_CREATE_PASSWORD = "create_password";
     private final String STATE_LOGGED_IN = "logged_in";
     private final String STATE_WELCOME = "welcome";
-
-
+    View view; // Reference to the View (part of the MVC setup)
+    private final Bank bank; // The ATM communicates with this Bank
     // Variables representing the state and data of the ATM UIModel
-      // Current state of the ATM
+    // Current state of the ATM
     private String state = STATE_WELCOME;
 
     private String accNumber = "";         // Account number being typed
@@ -56,7 +53,7 @@ public class UIModel {
     }
 
 
-    public void newNumber(){
+    public void newNumber() {
         setState(STATE_CREATE_NUMBER);
         numberPadInput = "";
         message = "Enter an account number";
@@ -84,13 +81,11 @@ public class UIModel {
     }
 
     // Change the ATM state and print a debug message whenever the state changes
-    private void setState(String newState)
-    {
-        if ( !state.equals(newState) )
-        {
+    private void setState(String newState) {
+        if (!state.equals(newState)) {
             String oldState = state;
             state = newState;
-            System.out.println("UIModel::setState: changed state from "+ oldState + " to " + newState);
+            System.out.println("UIModel::setState: changed state from " + oldState + " to " + newState);
         }
     }
 
@@ -123,11 +118,9 @@ public class UIModel {
     // This is a more complex method: pressing Enter causes the ATM to change state,
     // progressing from STATE_ACCOUNT_NO → STATE_PASSWORD → STATE_LOGGED_IN,
     // and back to STATE_ACCOUNT_NO when logging out.
-    public void processEnter()
-    {
+    public void processEnter() {
         // The action depends on the current ATM state
-        switch ( state )
-        {
+        switch (state) {
             case STATE_WELCOME:
 
                 setState(STATE_ACCOUNT_NO);
@@ -142,8 +135,7 @@ public class UIModel {
                 if (numberPadInput.isEmpty()) {
                     message = "Invalid Account Number";
                     reset(message);
-                }
-                else{
+                } else {
                     // Save the entered number as accNumber, clear numberPadInput,
                     // update the state to expect password, and provide instructions
                     accNumber = numberPadInput;
@@ -155,13 +147,12 @@ public class UIModel {
                 break;
 
             case STATE_PASSWORD:
-                    // Waiting for a password
-                    // Save the typed number as accPasswd, clear numberPadInput,
-                    // then contact the bank to attempt login
+                // Waiting for a password
+                // Save the typed number as accPasswd, clear numberPadInput,
+                // then contact the bank to attempt login
                 accPasswd = numberPadInput;
                 numberPadInput = "";
-                if ( bank.login(accNumber, accPasswd) )
-                {
+                if (bank.login(accNumber, accPasswd)) {
                     // Successful login: change state to STATE_LOGGED_IN and provide instructions
                     setState(STATE_LOGGED_IN);
                     message = "Logged In";
@@ -209,10 +200,10 @@ public class UIModel {
      * Parses a string into a valid transaction amount.
      * - If the string is empty, invalid, or consists only of zeros, returns 0.
      * - Otherwise, returns the integer value.
-     *
+     * <p>
      * Purpose:
      * Helper method for validating user-entered amounts in transactions (Deposit, Withdraw, etc.).
-     *
+     * <p>
      * Note: If you later add features like Transfer, this method can be reused.
      */
     private int parseValidAmount(String number) {
@@ -242,7 +233,6 @@ public class UIModel {
     }
 
 
-
     // Handle the Withdraw button:
     // If the user is logged in, attempt to withdraw the amount entered;
     // otherwise, reset the ATM and display an error message.
@@ -251,22 +241,19 @@ public class UIModel {
         if (state.equals(STATE_LOGGED_IN)) {
             int amount = parseValidAmount(numberPadInput);
             if (amount > 0) {
-                if(bank.withdraw( amount )){
+                if (bank.withdraw(amount)) {
                     message = "Withdraw Successful";
                     result = "Withdrawn: " + numberPadInput;
-                }
-                else{
+                } else {
                     message = "Withdraw Failed: Insufficient Funds";
                     result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
                 }
-            }
-            else{
+            } else {
                 message = "Invalid Amount";
                 result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
             }
             numberPadInput = "";
-        }
-        else {
+        } else {
             reset("You are not logged in");
         }
         update();
@@ -280,17 +267,15 @@ public class UIModel {
         if (state.equals(STATE_LOGGED_IN)) {
             int amount = parseValidAmount(numberPadInput);
             if (amount > 0) {
-                bank.deposit( amount );
+                bank.deposit(amount);
                 message = "Deposit Successful";
                 result = "Deposited: " + numberPadInput;
-            }
-            else {
+            } else {
                 message = "Invaild Amount";
                 result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
             }
             numberPadInput = "";
-        }
-        else {
+        } else {
             reset("You are not logged in");
         }
         update();

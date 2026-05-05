@@ -3,10 +3,12 @@ package com.atmbanksimulator;
 
 public class BankAccount {
     private String accNumber = "";
-    private String accPasswd ="";
+    private String accPasswd = "";
     private int balance = 0;
 
-    public BankAccount() {}
+    public BankAccount() {
+    }
+
     public BankAccount(String a, String p, int b) {
         accNumber = a;
         accPasswd = p;
@@ -14,7 +16,7 @@ public class BankAccount {
     }
 
 
-    public boolean withdraw( int amount ) {
+    public boolean withdraw(int amount) {
         if (amount < 0 || balance < amount) {
             return false;
         } else {
@@ -25,7 +27,7 @@ public class BankAccount {
 
     // deposit the amount of money into this account.
     // Return true if successful,or false if the amount is negative
-    public boolean deposit( int amount ) {
+    public boolean deposit(int amount) {
         if (amount < 0) {
             return false;
         } else {
@@ -40,17 +42,18 @@ public class BankAccount {
         return balance;
     }
 
+    protected void setBalance(double newBalance) {
+        this.balance = (int) newBalance;
+    }
+
     // Getter for the account number
     public String getAccNumber() {
         return accNumber;
     }
+
     // Getter for the account password
     public String getaccPasswd() {
         return accPasswd;
-    }
-
-    protected void setBalance(double newBalance) {
-        this.balance = (int) newBalance;
     }
 
 }
