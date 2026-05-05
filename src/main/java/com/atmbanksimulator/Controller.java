@@ -63,7 +63,9 @@ public class Controller {
                 clickSound.play();
                 UIModel.processBalance();
                 break;
-
+            case "TRF":
+                UIModel.processTransfer();
+                break;
             case "Fin":
                 clickSound.play();
                 UIModel.processFinish();

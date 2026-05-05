@@ -66,8 +66,10 @@ public class Bank {
         // - If found, set 'loggedInAccount' to that account and return true.
         // - If not found, reset 'loggedInAccount' to null and return false.
         for (BankAccount b : accounts) {
-            if (b.getAccNumber().equals(accountNumber) && b.getaccPasswd().equals(password)) {
-                // found the right account
+            if (b != null &&
+                    b.getAccNumber().equals(accountNumber) &&
+                    b.getaccPasswd().equals(password)) {
+
                 loggedInAccount = b;
                 return true;
             }
@@ -118,5 +120,22 @@ public class Bank {
         } else {
             return -1; // use -1 as an indicator of an error
         }
+    }
+    public boolean transfer(String toAccount, int amount)
+    {
+        if (!loggedIn()) return false;
+
+        for (int i = 0; i < numAccounts; i++) {
+
+            if (accounts[i].getAccNumber().equals(toAccount)) {
+
+                if (loggedInAccount.withdraw(amount)) {
+                    accounts[i].deposit(amount);
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
