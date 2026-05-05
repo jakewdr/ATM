@@ -15,30 +15,26 @@ public class UIModel {
     private final String STATE_CREATE_PASSWORD = "create_password";
     private final String STATE_LOGGED_IN = "logged_in";
     private final String STATE_WELCOME = "welcome";
-    View view; // Reference to the View (part of the MVC setup)
     private final Bank bank; // The ATM communicates with this Bank
+    private final int maxAttempts = 3;
+    View view; // Reference to the View (part of the MVC setup)
     // Variables representing the state and data of the ATM UIModel
     // Current state of the ATM
     private String state = STATE_WELCOME;
-
     // Data
     private String accNumber = "";
     private String newAccNumber = "";
     private String accPasswd = "";
-
     private String message;
     private String numberPadInput;
     private String result;
-
     private int loginAttempts = 0;
-    private final int maxAttempts = 3;
 
     // UIModel constructor: pass a Bank object that the ATM interacts with
     public UIModel(Bank bank) {
         this.bank = bank;
     }
 
-    // ===== WEEK 5: Welcome Page =====
     public void initialise() {
         setState(STATE_WELCOME);
         numberPadInput = "";
@@ -63,6 +59,7 @@ public class UIModel {
         result = "Enter a password\nWhich is five characters long\nFollowed by \"Ent\"";
         update();
     }
+
     private void reset(String msg) {
         message = msg;
         numberPadInput = "";
@@ -129,7 +126,6 @@ public class UIModel {
                 numberPadInput = "";
                 break;
 
-            // WEEK 3: Account Number → Password
             case STATE_ACCOUNT_NO:
                 if (numberPadInput.isEmpty()) {
                     message = "Invalid Account Number";
@@ -145,22 +141,16 @@ public class UIModel {
                 }
                 break;
 
-            // WEEK 3: Password → Login
             case STATE_PASSWORD:
-                // Waiting for a password
-                // Save the typed number as accPasswd, clear numberPadInput,
-                // then contact the bank to attempt login
+
                 accPasswd = numberPadInput;
                 numberPadInput = "";
-                if ( bank.login(accNumber, accPasswd) )
-                {
+                if (bank.login(accNumber, accPasswd)) {
                     loginAttempts = 0;
-                    // Successful login: change state to STATE_LOGGED_IN and provide instructions
                     setState(STATE_LOGGED_IN);
                     message = "Logged In";
                     result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
                 } else {
-                    // Login failed: reset ATM and display error
                     loginAttempts++;
 
                     if (loginAttempts >= maxAttempts) {
@@ -191,12 +181,20 @@ public class UIModel {
                 if (newPasswordNumber.length() == 5) {
                     bank.addBankAccount(newAccNumber, newPasswordNumber, 0);
                     reset("Account successfully created!");
+                    reset(message);
+                    result = "Press ENT to continue";
+                    setState(STATE_WELCOME);
+                    numberPadInput = "";
                     initialise();
 
                 } else {
                     reset("Invalid password");
+                    reset(message);
+                    setState(STATE_WELCOME);
+                    numberPadInput = "";
+                    initialise();
                 }
-                numberPadInput = "";
+
                 break;
 
             case STATE_LOGGED_IN:
@@ -207,16 +205,6 @@ public class UIModel {
         update();
     }
 
-    /**
-     * Parses a string into a valid transaction amount.
-     * - If the string is empty, invalid, or consists only of zeros, returns 0.
-     * - Otherwise, returns the integer value.
-     * <p>
-     * Purpose:
-     * Helper method for validating user-entered amounts in transactions (Deposit, Withdraw, etc.).
-     * <p>
-     * Note: If you later add features like Transfer, this method can be reused.
-     */
     private int parseValidAmount(String number) {
         if (number.isEmpty()) return 0;
         try {
@@ -226,7 +214,6 @@ public class UIModel {
         }
     }
 
-    // ===== Balance =====
     public void processBalance() {
         if (state.equals(STATE_LOGGED_IN)) {
             numberPadInput = "";
@@ -268,7 +255,7 @@ public class UIModel {
         update();
     }
 
-    // ===== Deposit =====
+
     public void processDeposit() {
         if (state.equals(STATE_LOGGED_IN)) {
             int amount = parseValidAmount(numberPadInput);
@@ -292,7 +279,7 @@ public class UIModel {
     public void processFinish() {
         if (state.equals(STATE_LOGGED_IN)) {
             message = "Thank you for using the Bank ATM";
-            result = "Goodbye!";
+            result = "Goodbye!\nPress ENT to continue";
             bank.logout();
 
             setState(STATE_WELCOME);
