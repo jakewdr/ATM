@@ -12,9 +12,9 @@ public class Bank {
     // Refactor addBankAccount and login methods to leverage ArrayList.
 
     // Instance variables storing bank information
-    private int maxAccounts = 10;                       // Maximum number of accounts the bank can hold
+    private final int maxAccounts = 10;                       // Maximum number of accounts the bank can hold
     private int numAccounts = 0;                        // Current number of accounts in the bank
-    private BankAccount[] accounts = new BankAccount[maxAccounts];  // Array to hold BankAccount objects
+    private final BankAccount[] accounts = new BankAccount[maxAccounts];  // Array to hold BankAccount objects
     private BankAccount loggedInAccount = null;         // Currently logged-in account ('null' if no one is logged in)
 
     // a method to create new BankAccount - this is known as a 'factory method' and is a more
@@ -42,7 +42,7 @@ public class Bank {
     public boolean addBankAccount(BankAccount a) {
         if (numAccounts < maxAccounts) {
             accounts[numAccounts] = a;
-            numAccounts++ ;
+            numAccounts++;
             return true;
         } else {
             return false;
@@ -88,17 +88,12 @@ public class Bank {
 
     // Check whether the bank currently has a logged-in account
     public boolean loggedIn() {
-        if (loggedInAccount == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return loggedInAccount != null;
     }
 
     // Attempt to deposit money into the currently logged-in account
     // by calling the deposit method of the BankAccount object
-    public boolean deposit(int amount)
-    {
+    public boolean deposit(int amount) {
         if (loggedIn()) {
             return loggedInAccount.deposit(amount);
         } else {
@@ -109,8 +104,7 @@ public class Bank {
 
     // Attempt to withdraw money from the currently logged-in account
     // by calling the withdraw method of the BankAccount object
-    public boolean withdraw(int amount)
-    {
+    public boolean withdraw(int amount) {
         if (loggedIn()) {
             return loggedInAccount.withdraw(amount);
         } else {
@@ -120,8 +114,7 @@ public class Bank {
 
     // get the currently logged-in account balance
     // by calling the getBalance method of the BankAccount object
-    public int getBalance()
-    {
+    public int getBalance() {
         if (loggedIn()) {
             return loggedInAccount.getBalance();
         } else {
