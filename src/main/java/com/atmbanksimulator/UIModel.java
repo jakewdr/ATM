@@ -19,8 +19,6 @@ public class UIModel {
     private final int maxAttempts = 3;
     View view; // Reference to the View (part of the MVC setup)
     private final Bank bank; // The ATM communicates with this Bank
-    private final int maxAttempts = 3;
-    View view; // Reference to the View (part of the MVC setup)
     // Variables representing the state and data of the ATM UIModel
     // Current state of the ATM
     private String state = STATE_WELCOME;
