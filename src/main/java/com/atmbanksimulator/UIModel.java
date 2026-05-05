@@ -2,11 +2,6 @@ package com.atmbanksimulator;
 
 // ===== 🧠 UIModel (Brain) =====
 
-// The UIModel represents all the actual content and functionality of the app
-// For the ATM, it keeps track of the information shown in the display
-// (the laMsg and two tfInput boxes), and the interaction with the bank, executes
-// commands provided by the controller and tells the view to update when
-// something changes
 public class UIModel {
     // The ATM UIModel can be in one of three states:
     // 1. Waiting for an account number
@@ -41,10 +36,7 @@ public class UIModel {
         this.bank = bank;
     }
 
-    // Initialize the ATM UIModel: this method is called by Main when starting the app
-    // - Set state to STATE_ACCOUNT_NO
-    // - Clear the numberPadInput - numbers displayed in the TextField
-    // - Display the welcome message and user instructions
+    // ===== WEEK 5: Welcome Page =====
     public void initialise() {
         setState(STATE_WELCOME);
         numberPadInput = "";
@@ -58,7 +50,7 @@ public class UIModel {
         setState(STATE_CREATE_NUMBER);
         numberPadInput = "";
         message = "Enter an account number";
-        result = "Enter an account number \nWhich is five \nCharacters long\nFollowed by \"Ent\"";
+        result = "Enter an account number\nWhich is five characters long\nFollowed by \"Ent\"";
         update();
     }
 
@@ -66,22 +58,38 @@ public class UIModel {
         setState(STATE_CREATE_PASSWORD);
         numberPadInput = "";
         message = "Enter a new password";
-        result = "Enter a password \nWhich is five \nCharacters long\nFollowed by \"Ent\"";
+        result = "Enter a password\nWhich is five characters long\nFollowed by \"Ent\"";
         update();
     }
-
-    // Reset the ATM UIModel after an invalid action or logout:
-    // - Set state to STATE_ACCOUNT_NO
-    // - Clear the numberPadInput
-    // - Display the provided message and user instructions
     private void reset(String msg) {
-        setState(STATE_ACCOUNT_NO);
-        numberPadInput = "";
         message = msg;
-        result = "Enter your account number\nFollowed by \"Ent\"";
+        numberPadInput = "";
+
+        switch (state) {
+
+            case STATE_ACCOUNT_NO:
+                result = "Enter your account number\nFollowed by \"Ent\"";
+                break;
+
+            case STATE_PASSWORD:
+                result = "Enter your password\nFollowed by \"Ent\"";
+                break;
+
+            case STATE_CREATE_NUMBER:
+                result = "Enter an account number\nWhich is five characters long\nFollowed by \"Ent\"";
+                break;
+
+            case STATE_CREATE_PASSWORD:
+                result = "Enter a password\nWhich is five characters long\nFollowed by \"Ent\"";
+                break;
+
+            default:
+                setState(STATE_ACCOUNT_NO);
+                result = "Enter your account number\nFollowed by \"Ent\"";
+                break;
+        }
     }
 
-    // Change the ATM state and print a debug message whenever the state changes
     private void setState(String newState) {
         if (!state.equals(newState)) {
             String oldState = state;
@@ -90,24 +98,14 @@ public class UIModel {
         }
     }
 
-    // These process**** methods are called by the Controller
-    // in response to specific button presses on the GUI.
-
-    // Handle a number button press: append the digit to numberPadInput
+    // ===== Number Input =====
     public void processNumber(String numberOnButton) {
-        // Optional extension:
-        // Improve feedback by showing what the number is being entered for based on the current state.
-        // e.g.  if state is STATE_ACCOUNT_NO, display "Receiving Account Number, Beep 5 received"
         numberPadInput += numberOnButton;
         message = "Beep! " + numberOnButton + " received";
         update();
     }
 
-    // Handle the Clear button: reset the current number stored in numberPadInput
     public void processClear() {
-        // Optional extension:
-        // Improve feedback by showing what was cleared depending on the current state.
-        // e.g. if state is STATE_ACCOUNT_NO, display "Account Number cleared: 123"
         if (!numberPadInput.isEmpty()) {
             numberPadInput = "";
             message = "Input Cleared";
@@ -123,16 +121,14 @@ public class UIModel {
         // The action depends on the current ATM state
         switch (state) {
             case STATE_WELCOME:
-
                 setState(STATE_ACCOUNT_NO);
                 message = "Enter your account number";
                 result = "Followed by \"Ent\"";
                 numberPadInput = "";
                 break;
 
+            // WEEK 3: Account Number → Password
             case STATE_ACCOUNT_NO:
-                // Waiting for a complete account number
-                // If nothing was entered, reset with "Invalid Account Number"
                 if (numberPadInput.isEmpty()) {
                     message = "Invalid Account Number";
                     reset(message);
@@ -147,6 +143,7 @@ public class UIModel {
                 }
                 break;
 
+            // WEEK 3: Password → Login
             case STATE_PASSWORD:
 
                 accPasswd = numberPadInput;
@@ -184,14 +181,15 @@ public class UIModel {
                 }
 
                 break;
+
+            // Account creation (your extension)
             case STATE_CREATE_NUMBER:
                 if (numberPadInput.length() == 5) {
                     newAccNumber = numberPadInput;
                     numberPadInput = "";
-                    newPassword(); // move to password step
+                    newPassword();
                 } else {
-                    message = "Invalid account number";
-                    reset(message);
+                    reset("Invalid account number");
                 }
                 break;
 
@@ -200,11 +198,11 @@ public class UIModel {
 
                 if (newPasswordNumber.length() == 5) {
                     bank.addBankAccount(newAccNumber, newPasswordNumber, 0);
-                    message = "Account successfully created!";
-                    reset(message); // go back to login screen
+                    reset("Account successfully created!");
+                    initialise();
+
                 } else {
-                    message = "Invalid password";
-                    reset(message);
+                    reset("Invalid password");
                 }
                 numberPadInput = "";
                 break;
@@ -215,11 +213,11 @@ public class UIModel {
                 break;
 
             case STATE_LOGGED_IN:
-            default:
-                // Do nothing for other states (user is already logged in)
+                // Enter does nothing when logged in
+                break;
         }
 
-        update(); // Refresh the GUI to show messages and input
+        update();
     }
 
     /**
@@ -233,19 +231,15 @@ public class UIModel {
      * Note: If you later add features like Transfer, this method can be reused.
      */
     private int parseValidAmount(String number) {
-        if (number.isEmpty()) {
-            return 0;
-        }
+        if (number.isEmpty()) return 0;
         try {
             return Integer.parseInt(number);
         } catch (NumberFormatException e) {
-            return 0; // Invalid input -> treated as 0
+            return 0;
         }
     }
 
-    // Handle the Balance button:
-    // - If the user is logged in, retrieve the current balance and update messages/results accordingly
-    // - Otherwise, reset the ATM and display an error message
+    // ===== Balance =====
     public void processBalance() {
         if (state.equals(STATE_LOGGED_IN)) {
             numberPadInput = "";
@@ -266,6 +260,7 @@ public class UIModel {
     public void processWithdraw() {
         if (state.equals(STATE_LOGGED_IN)) {
             int amount = parseValidAmount(numberPadInput);
+
             if (amount > 0) {
                 if (bank.withdraw(amount)) {
                     message = "Withdraw Successful";
@@ -278,6 +273,7 @@ public class UIModel {
                 message = "Invalid Amount";
                 result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
             }
+
             numberPadInput = "";
         } else {
             reset("You are not logged in");
@@ -285,13 +281,11 @@ public class UIModel {
         update();
     }
 
-    // Handle the Deposit button:
-    // - If the user is logged in, deposit the amount entered into the bank
-    // - Reads the amount from numberPadInput, validates it, and updates messages/results accordingly
-    // - Otherwise, reset the ATM and display an error message
+    // ===== Deposit =====
     public void processDeposit() {
         if (state.equals(STATE_LOGGED_IN)) {
             int amount = parseValidAmount(numberPadInput);
+
             if (amount > 0) {
                 bank.deposit(amount);
                 message = "Deposit Successful";
@@ -300,6 +294,7 @@ public class UIModel {
                 message = "Invaild Amount";
                 result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
             }
+
             numberPadInput = "";
         } else {
             reset("You are not logged in");
@@ -307,17 +302,12 @@ public class UIModel {
         update();
     }
 
-    // Handle the Finish button:
-    // - If the user is logged in, log out
-    // - Otherwise, reset the ATM and display an error message
-    // Handle the Finish button:
     public void processFinish() {
         if (state.equals(STATE_LOGGED_IN)) {
             message = "Thank you for using the Bank ATM";
             result = "Goodbye!";
             bank.logout();
 
-            // Return to welcome page
             setState(STATE_WELCOME);
             numberPadInput = "";
         } else {
@@ -369,7 +359,6 @@ public class UIModel {
         update();
     }
 
-    // Notify the View of changes by calling its update method
     private void update() {
         view.update(message, numberPadInput, result);
     }
