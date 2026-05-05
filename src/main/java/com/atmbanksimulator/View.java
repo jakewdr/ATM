@@ -3,8 +3,9 @@ package com.atmbanksimulator;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 // =====  View (Eyes / Ears / Nose / Mouth / Face) =====
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 // It does not know anything about business logic;
 // it only updates the display when notified by the UIModel.
 class View {
-    int H = 500;         // Height of window pixels
+    int H = 380;         // Height of window pixels
     int W = 500;         // Width  of window pixels
 
     Controller controller; // Reference to the Controller (part of the MVC setup)
@@ -39,7 +40,7 @@ class View {
         // 4. A tiled panel of buttons
         grid = new GridPane(); // top layout
         grid.setId("Layout");  // assign an id to be used in css file
-        buttonPane = new TilePane(); //
+        buttonPane = new TilePane();
         buttonPane.setId("Buttons"); // assign an id to be used in css file
 
         // controls
@@ -58,15 +59,11 @@ class View {
 
         // Define the button layout as a 2D array of text labels.
         // Empty strings ("") represent blank spaces in the grid.
-        String buttonTexts[][] = {
-                {"7",    "8",  "9",  "",  "Dep",  ""},
-                {"4",    "5",  "6",  "",  "W/D",  ""},
-                {"1",    "2",  "3",  "",  "Bal",  "Fin"},
-
-
-
-                {"CLR",  "0",  "",   "",  "TRF",     "Ent"} };
-
+        String[][] buttonTexts = {
+                {"7", "8", "9", "", "Dep", "Bal"},
+                {"4", "5", "6", "", "W/D", "Fin"},
+                {"1", "2", "3", "", "", ""},
+                {"CLR", "0", "TRF", "", "Ent", "New"}};
 
         // Build the button panel, loop through the array,
         // - For non-empty strings, create a Button
@@ -75,7 +72,7 @@ class View {
         // then place the buttonPane into the main grid as the fourth row.
         for (String[] row : buttonTexts) {
             for (String text : row) {
-                if (!text.isEmpty()) {
+                if (text.length() >= 1) {
                     // non-empty string - make a button
                     Button btn = new Button(text);
                     btn.setOnAction(this::buttonClicked);
