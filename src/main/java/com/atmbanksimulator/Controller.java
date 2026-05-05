@@ -70,7 +70,6 @@ public class Controller {
                 clickSound.play();
                 UIModel.processFinish();
                 break;
-
             case "New":
                 clickSound.play();
                 UIModel.newNumber();
