@@ -40,7 +40,7 @@ public class Bank {
     // a method to add a new bank account to the bank - it returns true if it succeeds
     // or false if it fails (because the bank is 'full')
     public boolean addBankAccount(BankAccount a) {
-        if (numAccounts < maxAccounts) {
+        if (numAccounts < maxAccounts && a != null) {
             accounts[numAccounts] = a;
             numAccounts++;
             return true;
@@ -66,6 +66,7 @@ public class Bank {
         // - If found, set 'loggedInAccount' to that account and return true.
         // - If not found, reset 'loggedInAccount' to null and return false.
         for (BankAccount b : accounts) {
+
             if (b != null &&
                     b.getAccNumber().equals(accountNumber) &&
                     b.getaccPasswd().equals(password)) {
@@ -74,6 +75,8 @@ public class Bank {
                 return true;
             }
         }
+
+
         // not found - return false
         loggedInAccount = null;
         return false;
@@ -112,16 +115,6 @@ public class Bank {
         }
     }
 
-    // get the currently logged-in account balance
-    // by calling the getBalance method of the BankAccount object
-    public int getBalance() {
-        if (loggedIn()) {
-            return loggedInAccount.getBalance();
-        } else {
-            return -1; // use -1 as an indicator of an error
-        }
-    }
-
     public boolean transfer(String toAccount, int amount) {
         if (!loggedIn()) return false;
 
@@ -137,5 +130,15 @@ public class Bank {
         }
 
         return false;
+    }
+
+    // get the currently logged-in account balance
+    // by calling the getBalance method of the BankAccount object
+    public int getBalance() {
+        if (loggedIn()) {
+            return loggedInAccount.getBalance();
+        } else {
+            return -1; // use -1 as an indicator of an error
+        }
     }
 }
