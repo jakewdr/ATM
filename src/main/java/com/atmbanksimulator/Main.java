@@ -21,7 +21,7 @@ public class Main extends Application {
         bank.addBankAccount("10001", "11111", 100);
         bank.addBankAccount("10002", "22222", 50);
 
-        //UIModel-View-Controller structure setup
+        // UIModel-View-Controller structure setup
         // Create the UIModel, View and Controller objects and link them together
         UIModel UIModel = new UIModel(bank);   // the UIModel needs the Bank object to 'talk to' the bank
         View view = new View();
@@ -29,11 +29,12 @@ public class Main extends Application {
 
         // Link them together so they can talk to each other
         view.controller = controller;
-        controller.UIModel = UIModel;
-        UIModel.view = view;
+        controller.UIModel = uiModel;
+        uiModel.view = view;
 
         // start up the GUI (view), and then tell the UIModel to initialise itself
         view.start(window);
-        UIModel.initialise();
+        uiModel.initialise();
     }
 }
+

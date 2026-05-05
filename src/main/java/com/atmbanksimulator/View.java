@@ -19,7 +19,6 @@ class View {
 
     Controller controller; // Reference to the Controller (part of the MVC setup)
 
-
     // Components (controls and layout) of the user interface
     private Label laMsg;        // Message label, e.g. shows "Welcome to ATM" at startup (not the window title)
     private TextField tfInput;  // Input field where numbers typed on the keypad appear
@@ -59,15 +58,12 @@ class View {
 
         // Define the button layout as a 2D array of text labels.
         // Empty strings ("") represent blank spaces in the grid.
-        String buttonTexts[][] = {
-                {"7",    "8",  "9",  "",  "Dep",  ""},
-                {"4",    "5",  "6",  "",  "W/D",  ""},
-                {"1",    "2",  "3",  "",  "Bal",  "Fin"},
-
-
-
-                {"CLR",  "0",  "",   "",  "TRF",     "Ent"} };
-
+        String[][] buttonTexts = {
+                {"7", "8", "9", "", "Dep", ""},
+                {"4", "5", "6", "", "W/D", ""},
+                {"1", "2", "3", "", "Bal", "Fin"},
+                {"CLR", "0", "", "", "TRF", "Ent"}
+        };
 
         // Build the button panel, loop through the array,
         // - For non-empty strings, create a Button
