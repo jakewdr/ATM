@@ -11,7 +11,9 @@ import javafx.stage.Stage;
 // Together, they simulate how an ATM thinks, reacts, and handles money.
 
 public class Main extends Application {
-    public static void main(String args[]) { launch(args); }
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     public void start(Stage window) {
         // Create a Bank object add two bank accounts for test

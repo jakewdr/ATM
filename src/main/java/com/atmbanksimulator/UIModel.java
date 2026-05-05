@@ -3,9 +3,6 @@ package com.atmbanksimulator;
 // ===== 🧠 UIModel (Brain) =====
 
 public class UIModel {
-    View view;
-    private Bank bank;
-
     // States
     private final String STATE_ACCOUNT_NO = "account_no";
     private final String STATE_PASSWORD = "password";
@@ -13,7 +10,8 @@ public class UIModel {
     private final String STATE_CREATE_PASSWORD = "create_password";
     private final String STATE_LOGGED_IN = "logged_in";
     private final String STATE_WELCOME = "welcome";
-
+    View view;
+    private final Bank bank;
     // Current state
     private String state = STATE_WELCOME;
 

@@ -3,8 +3,9 @@ package com.atmbanksimulator;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 // =====  View (Eyes / Ears / Nose / Mouth / Face) =====
@@ -51,13 +52,13 @@ class View {
 
         taResult = new TextArea();         // text area for instructions, transaction results
         taResult.setEditable(false);       // Read only
-        scrollPane  = new ScrollPane();    // create a scrolling window
+        scrollPane = new ScrollPane();    // create a scrolling window
         scrollPane.setContent(taResult);   // put the text area 'inside' the scrolling window
         grid.add(scrollPane, 0, 2);    // add the scrolling window to GUI on third row
 
         // Define the button layout as a 2D array of text labels.
         // Empty strings ("") represent blank spaces in the grid.
-        String buttonTexts[][] = {
+        String[][] buttonTexts = {
                 {"7", "8", "9", "", "Dep", ""},
                 {"4", "5", "6", "", "W/D", ""},
                 {"1", "2", "3", "", "Bal", "Fin"},
