@@ -15,23 +15,21 @@ public class UIModel {
     private final String STATE_CREATE_PASSWORD = "create_password";
     private final String STATE_LOGGED_IN = "logged_in";
     private final String STATE_WELCOME = "welcome";
+    private final String STATE_LOCKED = "locked";
+    private final int maxAttempts = 3;
     View view; // Reference to the View (part of the MVC setup)
     private final Bank bank; // The ATM communicates with this Bank
     // Variables representing the state and data of the ATM UIModel
     // Current state of the ATM
     private String state = STATE_WELCOME;
-
-    // Data
-    private String accNumber = "";
+    private String accNumber = "";         // Account number being typed
     private String newAccNumber = "";
-    private String accPasswd = "";
-
-    private String message;
-    private String numberPadInput;
-    private String result;
-
+    private String accPasswd = "";         // Password being typed
     private int loginAttempts = 0;
-    private final int maxAttempts = 3;
+    // Variables shown on the View display
+    private String message;                // Message label text
+    private String numberPadInput;         // Current number displayed in the TextField (as a string)
+    private String result;                 // Contents of the TextArea (may be multiple lines)
 
     // UIModel constructor: pass a Bank object that the ATM interacts with
     public UIModel(Bank bank) {
@@ -147,31 +145,41 @@ public class UIModel {
 
             // WEEK 3: Password → Login
             case STATE_PASSWORD:
-                // Waiting for a password
-                // Save the typed number as accPasswd, clear numberPadInput,
-                // then contact the bank to attempt login
+
                 accPasswd = numberPadInput;
                 numberPadInput = "";
-                if ( bank.login(accNumber, accPasswd) )
-                {
+
+                if (bank.login(accNumber, accPasswd)) {
+
                     loginAttempts = 0;
-                    // Successful login: change state to STATE_LOGGED_IN and provide instructions
                     setState(STATE_LOGGED_IN);
                     message = "Logged In";
-                    result = "Now enter the amount\nThen press transaction\n(Dep = Deposit, W/D = Withdraw)";
+                    result = "Now enter the amount\nThen press transaction";
+
                 } else {
-                    // Login failed: reset ATM and display error
+
                     loginAttempts++;
 
                     if (loginAttempts >= maxAttempts) {
-                        reset("Too many failed attempts");
-                        result = "ATM reset. Start again.";
-                        loginAttempts = 0;
+
+                        setState(STATE_LOCKED);
+                        message = "ATM Locked";
+                        result = "Too many failed attempts";
+                        numberPadInput = "";
+                        update();
+                        return;
+
                     } else {
-                        reset("Login failed");
-                        result = "Attempts left: " + (maxAttempts - loginAttempts);
+
+                        setState(STATE_PASSWORD);
+                        numberPadInput = "";
+
+                        message = "Login failed";
+                        result = "Attempts left: " + (maxAttempts - loginAttempts)
+                                + "\nTry password again";
                     }
                 }
+
                 break;
 
             // Account creation (your extension)
@@ -197,6 +205,11 @@ public class UIModel {
                     reset("Invalid password");
                 }
                 numberPadInput = "";
+                break;
+
+            case STATE_LOCKED:
+                message = "ATM Locked";
+                result = "System disabled";
                 break;
 
             case STATE_LOGGED_IN:
@@ -306,7 +319,7 @@ public class UIModel {
     public void processTransfer() {
 
         if (!state.equals(STATE_LOGGED_IN)) {
-            reset("You are not logged in");
+            reset("You aren't logged in");
             update();
             return;
         }
