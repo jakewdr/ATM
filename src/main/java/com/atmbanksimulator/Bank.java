@@ -13,8 +13,8 @@ public class Bank {
 
     // Instance variables storing bank information
     private final int maxAccounts = 10;                       // Maximum number of accounts the bank can hold
-    private int numAccounts = 0;                        // Current number of accounts in the bank
     private final BankAccount[] accounts = new BankAccount[maxAccounts];  // Array to hold BankAccount objects
+    private int numAccounts = 0;                        // Current number of accounts in the bank
     private BankAccount loggedInAccount = null;         // Currently logged-in account ('null' if no one is logged in)
 
     // a method to create new BankAccount - this is known as a 'factory method' and is a more
