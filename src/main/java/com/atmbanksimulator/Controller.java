@@ -13,6 +13,10 @@ public class Controller {
     private final AudioClip clickSound = new AudioClip(
             Objects.requireNonNull(getClass().getResource("/sounds/click.mp3")).toExternalForm()
     );
+
+    private final AudioClip errorSound = new AudioClip(
+            Objects.requireNonNull(getClass().getResource("/sounds/error.mp3")).toExternalForm()
+    );
     UIModel UIModel; // Reference to the UIModel (part of the MVC setup)
 
     // The process method is called by the View in response to user interface events.
@@ -71,7 +75,7 @@ public class Controller {
                 break;
 
             default:
-                clickSound.play();
+                errorSound.play();
                 UIModel.processUnknownKey(action);
                 break;
         }
