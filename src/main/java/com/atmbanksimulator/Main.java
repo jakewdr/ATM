@@ -23,7 +23,7 @@ public class Main extends Application {
 
         // UIModel-View-Controller structure setup
         // Create the UIModel, View and Controller objects and link them together
-        UIModel uiModel = new UIModel(bank);   // the UIModel needs the Bank object to 'talk to' the bank
+        UIModel UIModel = new UIModel(bank);   // the UIModel needs the Bank object to 'talk to' the bank
         View view = new View();
         Controller controller = new Controller();
 
