@@ -23,6 +23,7 @@ public class Controller {
     // It uses a switch statement to determine which UIModel method should be called,
     // and delegates the task accordingly.
     void process(String action) {
+
         switch (action) {
             case "1":
             case "2":
@@ -34,6 +35,7 @@ public class Controller {
             case "8":
             case "9":
             case "0":
+                clickSound.play();
                 UIModel.processNumber(action);
                 break;
 
